@@ -1,31 +1,17 @@
 import SwiftUI
+import PhotosUI
 
 struct GetImageView: View {
     @StateObject private var viewModel = GetImageViewModel()
+//    @State var selectedImages: [UIImage]
     
     var body: some View {
         
         VStack {
-            SelectedImageDisplayView(selectedImage: viewModel.selectedImage)
             ImageUrlInputView(imageUrlString: $viewModel.imageUrlString, onImageUrlSubmit: viewModel.getImageFromUrl)
-            ImageLibraryView(albumImages: viewModel.albumImages, selectedImage: $viewModel.selectedImage, showImagePicker: $viewModel.showImagePicker, onImagePicked: viewModel.handleImageSelection)
+            ImageLibraryView(albumImages: viewModel.albumImages, showImagePicker: $viewModel.showImagePicker, onImageSelected: viewModel.handleImageSelection)
         }
         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
-    }
-}
-
-
-struct SelectedImageDisplayView: View {
-    var selectedImage: UIImage?
-    
-    var body: some View {
-        if let selectedImage = selectedImage {
-            Image(uiImage: selectedImage)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(maxWidth: 200, maxHeight: 200)
-            Text("Loaded Image")
-        }
     }
 }
 
@@ -47,9 +33,8 @@ struct ImageUrlInputView: View {
 
 struct ImageLibraryView: View {
     var albumImages: [UIImage]
-    @Binding var selectedImage: UIImage?
     @Binding var showImagePicker: Bool
-    var onImagePicked: (UIImage) -> ()
+    var onImageSelected: (UIImage) -> ()
 
     var body: some View {
         VStack {
@@ -58,7 +43,7 @@ struct ImageLibraryView: View {
             }
             .padding()
             .sheet(isPresented: $showImagePicker) {
-                ImagePicker(selectedImage: $selectedImage, onImagePicked: onImagePicked)
+                CustomImagePicker(onImageSelected: onImageSelected)
             }
             GeometryReader { geometry in
                 let w = (geometry.size.width / 3)
@@ -88,37 +73,47 @@ struct ImageLibraryView: View {
 }
 
 
-struct ImagePicker: UIViewControllerRepresentable {
-    @Binding var selectedImage: UIImage?
+struct CustomImagePicker: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
-    var onImagePicked: (UIImage) -> Void
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    func makeUIViewController(context: UIViewControllerRepresentableContext<ImagePicker>) -> UIImagePickerController {
-        let picker = UIImagePickerController()
+    var onImageSelected: (UIImage) -> ()
+
+    func makeUIViewController(context: Context) -> some UIViewController {
+        var config = PHPickerConfiguration()
+        config.selectionLimit = 0 // 0は無制限を意味します
+        config.filter = .images
+
+        let picker = PHPickerViewController(configuration: config)
         picker.delegate = context.coordinator
         return picker
     }
-    
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: UIViewControllerRepresentableContext<ImagePicker>) {}
-}
 
-class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-    var parent: ImagePicker
-    
-    init(_ parent: ImagePicker) {
-        self.parent = parent
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
     }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[.originalImage] as? UIImage {
-            parent.onImagePicked(image)
+
+    class Coordinator: NSObject, PHPickerViewControllerDelegate {
+        var parent: CustomImagePicker
+
+
+        init(_ parent: CustomImagePicker) {
+            self.parent = parent
         }
-        
-        parent.presentationMode.wrappedValue.dismiss()
+
+        func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+            parent.presentationMode.wrappedValue.dismiss()
+            
+            for result in results {
+                result.itemProvider.loadObject(ofClass: UIImage.self) { (object, error) in
+                    if let image = object as? UIImage {
+                        DispatchQueue.main.async {
+                            self.parent.onImageSelected(image)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -9,7 +9,6 @@ import Foundation
 
 class GetImageViewModel: ObservableObject {
     @Published var imageUrlString: String = "https://i.imgur.com/UDbDHEI.jpeg"
-    @Published var selectedImage: UIImage?
     @Published var imageFileNames: [String] = []
     @Published var showImagePicker: Bool = false
 
@@ -18,8 +17,8 @@ class GetImageViewModel: ObservableObject {
     }
 
     func handleImageSelection(image: UIImage) {
-        self.selectedImage = image
         if let fileName = saveImageLocally(image: image) {
+            print("Handle Image Selection : \(fileName)")
             imageFileNames.append(fileName)
         }
     }
