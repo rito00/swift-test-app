@@ -6,16 +6,16 @@ struct GetImageView: View {
     var body: some View {
         
         VStack {
-            ImageDisplayView(selectedImage: viewModel.selectedImage)
-            ImageUrlInputView(imageUrlString: $viewModel.imageUrlString, onImageUrlSubmit: viewModel.loadImage)
-            ImageLibraryView(albumImages: viewModel.albumImages, selectedImage: $viewModel.selectedImage, showImagePicker: $viewModel.showImagePicker, handleImageSelection: viewModel.handleImageSelection)
+            SelectedImageDisplayView(selectedImage: viewModel.selectedImage)
+            ImageUrlInputView(imageUrlString: $viewModel.imageUrlString, onImageUrlSubmit: viewModel.getImageFromUrl)
+            ImageLibraryView(albumImages: viewModel.albumImages, selectedImage: $viewModel.selectedImage, showImagePicker: $viewModel.showImagePicker, onImagePicked: viewModel.handleImageSelection)
         }
         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
     }
 }
 
 
-struct ImageDisplayView: View {
+struct SelectedImageDisplayView: View {
     var selectedImage: UIImage?
     
     var body: some View {
@@ -49,7 +49,7 @@ struct ImageLibraryView: View {
     var albumImages: [UIImage]
     @Binding var selectedImage: UIImage?
     @Binding var showImagePicker: Bool
-    var handleImageSelection: (UIImage) -> ()
+    var onImagePicked: (UIImage) -> ()
 
     var body: some View {
         VStack {
@@ -58,7 +58,7 @@ struct ImageLibraryView: View {
             }
             .padding()
             .sheet(isPresented: $showImagePicker) {
-                ImagePicker(selectedImage: $selectedImage, onImagePicked: handleImageSelection)
+                ImagePicker(selectedImage: $selectedImage, onImagePicked: onImagePicked)
             }
             GeometryReader { geometry in
                 let w = (geometry.size.width / 3)
@@ -82,10 +82,8 @@ struct ImageLibraryView: View {
     }
     
     // 縦横比をチェックし、画像がランドスケープ（横長）かどうかを判断
-    func isImageLandscape(image: UIImage, in size: CGSize) -> Bool {
-        let imageAspectRatio = image.size.width / image.size.height
-        let viewAspectRatio = size.width / size.width // ここでは正方形の領域を想定
-        return imageAspectRatio > viewAspectRatio
+    func isImageLandscape(image: UIImage) -> Bool {
+        return image.size.width > image.size.height
     }
 }
 
