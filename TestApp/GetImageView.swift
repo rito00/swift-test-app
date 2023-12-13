@@ -3,7 +3,7 @@ import PhotosUI
 
 struct GetImageView: View {
     @StateObject private var viewModel = GetImageViewModel()
-//    @State var selectedImages: [UIImage]
+    //    @State var selectedImages: [UIImage]
     
     var body: some View {
         
@@ -35,7 +35,7 @@ struct ImageLibraryView: View {
     var albumImages: [UIImage]
     @Binding var showImagePicker: Bool
     var onImageSelected: (UIImage) -> ()
-
+    
     var body: some View {
         VStack {
             Button("Load Image from Library") {
@@ -46,18 +46,27 @@ struct ImageLibraryView: View {
                 CustomImagePicker(onImageSelected: onImageSelected)
             }
             GeometryReader { geometry in
-                let w = (geometry.size.width / 3)
-                let columns: [GridItem] = Array(repeating: GridItem(.fixed(w), spacing: 0), count: 3) // 3列のグリッド
+                let columns: [GridItem] = Array(repeating: GridItem(spacing: 0), count: 3) // 3列のグリッド
                 
                 ScrollView{
                     LazyVGrid(columns: columns, spacing: 0) {
                         ForEach(albumImages, id: \.self) { image in
-                            Image(uiImage: image)
-                                .resizable()
-                                .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
-                                .clipped()
-                                .border(Color.black, width: 1)
+                            if self.isImageLandscape(image: image) {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
+                                    .scaledToFill()
+                                    .border(Color.black, width: 1)
+                            }
+                            else {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
+                                    .scaledToFit()
+                                    .border(Color.black, width: 1)
+                            }
                         }
+                        
                     }
                 }
                 .border(Color.orange)
@@ -68,6 +77,7 @@ struct ImageLibraryView: View {
     
     // 縦横比をチェックし、画像がランドスケープ（横長）かどうかを判断
     func isImageLandscape(image: UIImage) -> Bool {
+        print("image width : \(image.size.width), height : \(image.size.height)")
         return image.size.width > image.size.height
     }
 }
@@ -76,31 +86,31 @@ struct ImageLibraryView: View {
 struct CustomImagePicker: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
     var onImageSelected: (UIImage) -> ()
-
+    
     func makeUIViewController(context: Context) -> some UIViewController {
         var config = PHPickerConfiguration()
         config.selectionLimit = 0 // 0は無制限を意味します
         config.filter = .images
-
+        
         let picker = PHPickerViewController(configuration: config)
         picker.delegate = context.coordinator
         return picker
     }
-
+    
     func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
-
+    
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
-
+    
     class Coordinator: NSObject, PHPickerViewControllerDelegate {
         var parent: CustomImagePicker
-
-
+        
+        
         init(_ parent: CustomImagePicker) {
             self.parent = parent
         }
-
+        
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             parent.presentationMode.wrappedValue.dismiss()
             

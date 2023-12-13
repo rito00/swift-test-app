@@ -15,6 +15,7 @@
 		527E943E2B28680400CC951A /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527E943D2B28680400CC951A /* CounterView.swift */; };
 		527E94402B28682700CC951A /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527E943F2B28682700CC951A /* Options.swift */; };
 		527E94422B28689C00CC951A /* GetImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527E94412B28689C00CC951A /* GetImageViewModel.swift */; };
+		527E94442B29809400CC951A /* CustomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527E94432B29809400CC951A /* CustomScrollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		527E943D2B28680400CC951A /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 		527E943F2B28682700CC951A /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
 		527E94412B28689C00CC951A /* GetImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetImageViewModel.swift; sourceTree = "<group>"; };
+		527E94432B29809400CC951A /* CustomScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				527E94352B28611B00CC951A /* GetImageView.swift */,
 				527E943D2B28680400CC951A /* CounterView.swift */,
 				527E943F2B28682700CC951A /* Options.swift */,
+				527E94432B29809400CC951A /* CustomScrollView.swift */,
 				527E94272B28608D00CC951A /* Assets.xcassets */,
 				527E94292B28608D00CC951A /* Preview Content */,
 			);
@@ -150,6 +153,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				527E94262B28608C00CC951A /* ContentView.swift in Sources */,
+				527E94442B29809400CC951A /* CustomScrollView.swift in Sources */,
 				527E94242B28608C00CC951A /* Main.swift in Sources */,
 				527E94362B28611B00CC951A /* GetImageView.swift in Sources */,
 				527E94422B28689C00CC951A /* GetImageViewModel.swift in Sources */,

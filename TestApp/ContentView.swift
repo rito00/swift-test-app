@@ -31,6 +31,10 @@ struct ContentView: View {
                     Text("Option")
                         .padding()
                 }
+                NavigationLink(destination: CustomScrollView()){
+                    Text("Custom Scroll")
+                        .padding()
+                }
                 Text("count \(appState.count)")
                     .padding()
             
