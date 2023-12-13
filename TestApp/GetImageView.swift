@@ -51,22 +51,13 @@ struct ImageLibraryView: View {
                 ScrollView{
                     LazyVGrid(columns: columns, spacing: 0) {
                         ForEach(albumImages, id: \.self) { image in
-                            if self.isImageLandscape(image: image) {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
-                                    .scaledToFill()
-                                    .border(Color.black, width: 1)
-                            }
-                            else {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
-                                    .scaledToFit()
-                                    .border(Color.black, width: 1)
-                            }
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: isImageLandscape(image: image) ? .fit : .fill)
+                                .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
+                                .clipped()
+                                .border(Color.black, width: 1)
                         }
-                        
                     }
                 }
                 .border(Color.orange)
