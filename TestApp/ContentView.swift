@@ -35,16 +35,22 @@ struct ContentView: View {
                     Text("Custom Scroll")
                         .padding()
                 }
-                Text("count \(appState.count)")
-                    .padding()
-            
+                NavigationLink(destination: CameraMainView()){
+                    Text("Camera")
+                        .padding()
+                }
+                
+                
+                
             }
-            .navigationBarTitle("メイン")
+            Text("count \(appState.count)")
+                .padding()
+            
         }
-        
+        .navigationBarTitle("メイン")
     }
+    
 }
-
 
 
 #Preview {

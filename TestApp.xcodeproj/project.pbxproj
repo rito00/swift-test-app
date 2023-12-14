@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5202C5222B2AAA0B008486AC /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5202C5212B2AAA0B008486AC /* CameraView.swift */; };
 		527E94242B28608C00CC951A /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527E94232B28608C00CC951A /* Main.swift */; };
 		527E94262B28608C00CC951A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527E94252B28608C00CC951A /* ContentView.swift */; };
 		527E94282B28608D00CC951A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 527E94272B28608D00CC951A /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5202C5212B2AAA0B008486AC /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		527E94202B28608C00CC951A /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		527E94232B28608C00CC951A /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		527E94252B28608C00CC951A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 				527E94352B28611B00CC951A /* GetImageView.swift */,
 				527E943D2B28680400CC951A /* CounterView.swift */,
 				527E943F2B28682700CC951A /* Options.swift */,
+				5202C5212B2AAA0B008486AC /* CameraView.swift */,
 				527E94432B29809400CC951A /* CustomScrollView.swift */,
 				527E94272B28608D00CC951A /* Assets.xcassets */,
 				527E94292B28608D00CC951A /* Preview Content */,
@@ -159,6 +162,7 @@
 				527E94422B28689C00CC951A /* GetImageViewModel.swift in Sources */,
 				527E94402B28682700CC951A /* Options.swift in Sources */,
 				527E943E2B28680400CC951A /* CounterView.swift in Sources */,
+				5202C5222B2AAA0B008486AC /* CameraView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,6 +299,7 @@
 				DEVELOPMENT_TEAM = 4P729VNXL4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -324,6 +329,7 @@
 				DEVELOPMENT_TEAM = 4P729VNXL4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
