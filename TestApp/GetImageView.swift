@@ -9,7 +9,7 @@ struct GetImageView: View {
         
         VStack {
             ImageUrlInputView(imageUrlString: $viewModel.imageUrlString, onImageUrlSubmit: viewModel.getImageFromUrl)
-            ImageLibraryView(albumImages: viewModel.albumImages, showImagePicker: $viewModel.showImagePicker, onImageSelected: viewModel.handleImageSelection)
+            ImageLibraryView(albumImages: viewModel.albumImages, showImagePicker: $viewModel.showImagePicker, onImageSelected: viewModel.handleImagesSelection)
         }
         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
     }
@@ -34,7 +34,7 @@ struct ImageUrlInputView: View {
 struct ImageLibraryView: View {
     var albumImages: [UIImage]
     @Binding var showImagePicker: Bool
-    var onImageSelected: (UIImage) -> ()
+    var onImageSelected: ([UIImage]) -> ()
     
     var body: some View {
         VStack {
@@ -56,7 +56,7 @@ struct ImageLibraryView: View {
                                 .aspectRatio(contentMode: isImageLandscape(image: image) ? .fit : .fill)
                                 .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
                                 .clipped()
-                                .border(Color.black, width: 1)
+                                .border(Color.black, width: 0.5)
                         }
                     }
                 }
@@ -76,7 +76,7 @@ struct ImageLibraryView: View {
 
 struct CustomImagePicker: UIViewControllerRepresentable {
     @Environment(\.presentationMode) var presentationMode
-    var onImageSelected: (UIImage) -> ()
+    var onImageSelected: ([UIImage]) -> ()
     
     func makeUIViewController(context: Context) -> some UIViewController {
         var config = PHPickerConfiguration()
@@ -97,7 +97,6 @@ struct CustomImagePicker: UIViewControllerRepresentable {
     class Coordinator: NSObject, PHPickerViewControllerDelegate {
         var parent: CustomImagePicker
         
-        
         init(_ parent: CustomImagePicker) {
             self.parent = parent
         }
@@ -105,14 +104,25 @@ struct CustomImagePicker: UIViewControllerRepresentable {
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             parent.presentationMode.wrappedValue.dismiss()
             
-            for result in results {
+            let dispatchGroup = DispatchGroup()
+            var imageDict = [Int: UIImage]()
+            
+            for (index, result) in results.enumerated() {
+                dispatchGroup.enter()
                 result.itemProvider.loadObject(ofClass: UIImage.self) { (object, error) in
+                    defer { dispatchGroup.leave() }
                     if let image = object as? UIImage {
                         DispatchQueue.main.async {
-                            self.parent.onImageSelected(image)
+                            imageDict[index] = image
                         }
                     }
                 }
+            }
+            
+            dispatchGroup.notify(queue: .main) {
+                // インデックスに従って画像をソート
+                let sortedImages = results.indices.compactMap { imageDict[$0] }
+                self.parent.onImageSelected(sortedImages)
             }
         }
     }

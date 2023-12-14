@@ -23,6 +23,15 @@ class GetImageViewModel: ObservableObject {
         }
     }
     
+    func handleImagesSelection(images: [UIImage]) {
+        for image in images {
+            if let fileName = saveImageLocally(image: image) {
+                print("Handle Image Selection : \(fileName)")
+                imageFileNames.append(fileName)
+            }
+        }
+    }
+    
     func getImageFromUrl() {
         guard let url = URL(string: imageUrlString) else { return }
         
