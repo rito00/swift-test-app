@@ -15,13 +15,6 @@ class GetImageViewModel: ObservableObject {
     var albumImages: [UIImage] {
         imageFileNames.compactMap { loadImageFromLocal(fileName: $0) }
     }
-
-    func handleImageSelection(image: UIImage) {
-        if let fileName = saveImageLocally(image: image) {
-            print("Handle Image Selection : \(fileName)")
-            imageFileNames.append(fileName)
-        }
-    }
     
     func handleImagesSelection(images: [UIImage]) {
         for image in images {
@@ -38,13 +31,14 @@ class GetImageViewModel: ObservableObject {
         URLSession.shared.dataTask(with: url) { data, response, error in
             if let data = data {
                 DispatchQueue.main.async {
-                    self.handleImageSelection(image: UIImage(data:data)!)
+                    let image = UIImage(data:data)!
+                    self.handleImagesSelection(images: [image])
                 }
             }
         }.resume()
     }
     
-    func saveImageLocally(image: UIImage) -> String? {
+    private func saveImageLocally(image: UIImage) -> String? {
         guard let data = image.jpegData(compressionQuality: 1) ?? image.pngData() else { return nil }
         let fileName = UUID().uuidString
         let fileURL = getDocumentsDirectory().appendingPathComponent(fileName)
@@ -63,7 +57,7 @@ class GetImageViewModel: ObservableObject {
         return paths[0]
     }
     
-    func loadImageFromLocal(fileName: String) -> UIImage? {
+    private func loadImageFromLocal(fileName: String) -> UIImage? {
         let fileURL = getDocumentsDirectory().appendingPathComponent(fileName)
         do {
             let imageData = try Data(contentsOf: fileURL)

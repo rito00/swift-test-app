@@ -2,9 +2,9 @@ import SwiftUI
 import PhotosUI
 
 struct GetImageView: View {
-//    @StateObject private var viewModel = GetImageViewModel()
+    //    @StateObject private var viewModel = GetImageViewModel()
     @EnvironmentObject var viewModel: GetImageViewModel
-    //    @State var selectedImages: [UIImage]
+    @State var selectedImage: UIImage?
     
     var body: some View {
         
@@ -12,12 +12,43 @@ struct GetImageView: View {
             // Load Image from URL
             ImageUrlInputView(imageUrlString: $viewModel.imageUrlString, onImageUrlSubmit: viewModel.getImageFromUrl)
             // Take Photo with Camera
-            CameraView(onPhotoTaken: viewModel.handleImageSelection)
-
+            CameraView(onPhotoTaken: viewModel.handleImagesSelection)
+            
             // Load Image form Library
-            ImageLibraryView(albumImages: viewModel.albumImages, showImagePicker: $viewModel.showImagePicker, onImageSelected: viewModel.handleImagesSelection)
+            ImageLibraryView(albumImages: viewModel.albumImages, showImagePicker: $viewModel.showImagePicker, onImageSelected: viewModel.handleImagesSelection, selectedImage: $selectedImage)
         }
         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
+        .overlay(
+            selectedImage != nil ?
+            Color.black.opacity(0.5)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    selectedImage = nil
+                }
+                .overlay(
+                    VStack {
+                        Image(uiImage: selectedImage!)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding()
+                        
+                        Button(action: {
+                            // ここで削除の処理を行う
+//                            if let index = viewModel.albumImages.firstIndex(of: selectedImage!) {
+//                                viewModel.albumImages.remove(at: index)
+//                            }
+                            selectedImage = nil
+                        }) {
+                            Text("Delete Image")
+                                .foregroundColor(.red)
+                                .padding()
+                                .background(Color.white)
+                                .cornerRadius(10)
+                        }
+                    }
+                )
+            : nil
+        )
     }
 }
 
@@ -39,7 +70,7 @@ struct ImageUrlInputView: View {
 
 struct CameraView: View {
     @State private var isCameraPresented = false
-    var onPhotoTaken: (UIImage) -> ()
+    var onPhotoTaken: ([UIImage]) -> ()
     
     var body: some View {
         
@@ -54,7 +85,7 @@ struct CameraView: View {
 
 struct Camera: UIViewControllerRepresentable {
     @Binding var isCameraPresented: Bool
-    var onPhotoTaken: (UIImage) -> ()
+    var onPhotoTaken: ([UIImage]) -> ()
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
@@ -80,7 +111,7 @@ struct Camera: UIViewControllerRepresentable {
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             if let uiImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
                 print("新しい画像が選択されました: \(String(describing: uiImage))")
-                parent.onPhotoTaken(uiImage)
+                parent.onPhotoTaken([uiImage])
             }
             parent.isCameraPresented = false
         }
@@ -91,6 +122,7 @@ struct ImageLibraryView: View {
     var albumImages: [UIImage]
     @Binding var showImagePicker: Bool
     var onImageSelected: ([UIImage]) -> ()
+    @Binding var selectedImage: UIImage?
     
     var body: some View {
         VStack {
@@ -113,6 +145,9 @@ struct ImageLibraryView: View {
                                 .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
                                 .clipped()
                                 .border(Color.black, width: 0.5)
+                                .onTapGesture {
+                                    selectedImage = image
+                                }
                         }
                     }
                 }
@@ -161,6 +196,9 @@ struct CustomImagePicker: UIViewControllerRepresentable {
             parent.presentationMode.wrappedValue.dismiss()
             
             let dispatchGroup = DispatchGroup()
+            
+            
+            
             var imageDict = [Int: UIImage]()
             
             for (index, result) in results.enumerated() {
@@ -183,7 +221,6 @@ struct CustomImagePicker: UIViewControllerRepresentable {
         }
     }
 }
-
 #Preview {
     GetImageView()
         .environmentObject(GetImageViewModel())
