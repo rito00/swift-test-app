@@ -9,6 +9,7 @@ struct GetImageView: View {
         
         VStack {
             ImageUrlInputView(imageUrlString: $viewModel.imageUrlString, onImageUrlSubmit: viewModel.getImageFromUrl)
+            CameraMainView()
             ImageLibraryView(albumImages: viewModel.albumImages, showImagePicker: $viewModel.showImagePicker, onImageSelected: viewModel.handleImagesSelection)
         }
         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
@@ -23,7 +24,7 @@ struct ImageUrlInputView: View {
         VStack {
             TextField("Enter Image URL", text: $imageUrlString)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+                .padding(.top)
             
             Button("Load Image", action: onImageUrlSubmit)
                 .padding()
