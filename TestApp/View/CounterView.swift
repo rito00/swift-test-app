@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct CounterView: View {
-    // カウンターの状態を保持する変数
-//    @State private var count = 0
     @EnvironmentObject var appState: AppState
     @State private var isEven = true
     

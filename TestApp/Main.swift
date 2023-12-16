@@ -14,6 +14,7 @@ struct Main: App {
         WindowGroup {
             ContentView()
                 .environmentObject(AppState())
+                .environmentObject(GetImageViewModel())
         }
     }
 }
@@ -21,12 +22,11 @@ struct Main: App {
 class AppState: ObservableObject {
     @Published var count: Int = 0
     @Published var selectedOption: Int = 0
-    // ここにimagesかけばええやんけ！
-//    @Publishd var selectedImages
 }
 
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
+    @EnvironmentObject var getImageViewModel: GetImageViewModel
     var body: some View {
         NavigationView {
             List {
@@ -35,7 +35,7 @@ struct ContentView: View {
                         .padding()
                 }
                 NavigationLink(destination: GetImageView()) {
-                    Text("Get Image")
+                    Text("Images")
                         .padding()
                 }
                 NavigationLink(destination: OptionsView()) {
@@ -50,9 +50,6 @@ struct ContentView: View {
 //                    Text("Camera")
 //                        .padding()
 //                }
-                
-                
-                
             }
             Text("count \(appState.count)")
                 .padding()
