@@ -9,18 +9,14 @@ import Foundation
 
 class GetImageViewModel: ObservableObject {
     @Published var imageUrlString: String = "https://i.imgur.com/UDbDHEI.jpeg"
-    @Published var imageFileNames: [String] = []
     @Published var showImagePicker: Bool = false
-
-    var albumImages: [UIImage] {
-        imageFileNames.compactMap { loadImageFromLocal(fileName: $0) }
-    }
+    @Published var imagesData: [ImageData] = []
     
     func handleImagesSelection(images: [UIImage]) {
         for image in images {
             if let fileName = saveImageLocally(image: image) {
-                print("Handle Image Selection : \(fileName)")
-                imageFileNames.append(fileName)
+                let imageData = ImageData(image: image, fileName: fileName)
+                imagesData.append(imageData)
             }
         }
     }
@@ -36,6 +32,22 @@ class GetImageViewModel: ObservableObject {
                 }
             }
         }.resume()
+    }
+    
+    func removeImage(imageData: ImageData) {
+        // ドキュメントディレクトリ内の該当ファイルを削除
+        let fileURL = getDocumentsDirectory().appendingPathComponent(imageData.fileName)
+        do {
+            try FileManager.default.removeItem(at: fileURL)
+            print("Image removed: \(imageData.fileName)")
+        } catch {
+            print("Error removing image: \(error)")
+        }
+
+        // imagesData 配列からも削除
+        if let index = imagesData.firstIndex(where: { $0.fileName == imageData.fileName }) {
+            imagesData.remove(at: index)
+        }
     }
     
     private func saveImageLocally(image: UIImage) -> String? {
@@ -67,4 +79,10 @@ class GetImageViewModel: ObservableObject {
             return nil
         }
     }
+}
+
+struct ImageData: Identifiable {
+    let id = UUID()
+    var image : UIImage
+    var fileName : String
 }

@@ -4,7 +4,7 @@ import PhotosUI
 struct GetImageView: View {
     //    @StateObject private var viewModel = GetImageViewModel()
     @EnvironmentObject var viewModel: GetImageViewModel
-    @State var selectedImage: UIImage?
+    @State var selectedImageData: ImageData?
     
     var body: some View {
         
@@ -15,19 +15,19 @@ struct GetImageView: View {
             CameraView(onPhotoTaken: viewModel.handleImagesSelection)
             
             // Load Image form Library
-            ImageLibraryView(albumImages: viewModel.albumImages, showImagePicker: $viewModel.showImagePicker, onImageSelected: viewModel.handleImagesSelection, selectedImage: $selectedImage)
+            ImageLibraryView(imagesData: viewModel.imagesData, showImagePicker: $viewModel.showImagePicker, onImageSelected: viewModel.handleImagesSelection, selectedImageData: $selectedImageData)
         }
         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
         .overlay(
-            selectedImage != nil ?
+            selectedImageData != nil ?
             Color.black.opacity(0.5)
                 .ignoresSafeArea()
                 .onTapGesture {
-                    selectedImage = nil
+                    selectedImageData = nil
                 }
                 .overlay(
                     VStack {
-                        Image(uiImage: selectedImage!)
+                        Image(uiImage: selectedImageData!.image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .padding()
@@ -37,7 +37,8 @@ struct GetImageView: View {
 //                            if let index = viewModel.albumImages.firstIndex(of: selectedImage!) {
 //                                viewModel.albumImages.remove(at: index)
 //                            }
-                            selectedImage = nil
+                            viewModel.removeImage(imageData: selectedImageData!)
+                            selectedImageData = nil
                         }) {
                             Text("Delete Image")
                                 .foregroundColor(.red)
@@ -119,10 +120,10 @@ struct Camera: UIViewControllerRepresentable {
 }
 
 struct ImageLibraryView: View {
-    var albumImages: [UIImage]
+    var imagesData: [ImageData]
     @Binding var showImagePicker: Bool
     var onImageSelected: ([UIImage]) -> ()
-    @Binding var selectedImage: UIImage?
+    @Binding var selectedImageData: ImageData?
     
     var body: some View {
         VStack {
@@ -138,15 +139,15 @@ struct ImageLibraryView: View {
                 
                 ScrollView{
                     LazyVGrid(columns: columns, spacing: 0) {
-                        ForEach(albumImages, id: \.self) { image in
-                            Image(uiImage: image)
+                        ForEach(imagesData) { data in
+                            Image(uiImage: data.image)
                                 .resizable()
-                                .aspectRatio(contentMode: isImageLandscape(image: image) ? .fit : .fill)
+                                .aspectRatio(contentMode: isImageLandscape(image: data.image) ? .fit : .fill)
                                 .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
                                 .clipped()
                                 .border(Color.black, width: 0.5)
                                 .onTapGesture {
-                                    selectedImage = image
+                                    selectedImageData = data
                                 }
                         }
                     }
