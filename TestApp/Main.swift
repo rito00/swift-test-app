@@ -21,6 +21,8 @@ struct Main: App {
 class AppState: ObservableObject {
     @Published var count: Int = 0
     @Published var selectedOption: Int = 0
+    // ここにimagesかけばええやんけ！
+//    @Publishd var selectedImages
 }
 
 struct ContentView: View {
@@ -44,10 +46,10 @@ struct ContentView: View {
                     Text("Custom Scroll")
                         .padding()
                 }
-                NavigationLink(destination: CameraMainView()){
-                    Text("Camera")
-                        .padding()
-                }
+//                NavigationLink(destination: CameraView()){
+//                    Text("Camera")
+//                        .padding()
+//                }
                 
                 
                 

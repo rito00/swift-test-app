@@ -9,7 +9,7 @@ struct GetImageView: View {
         
         VStack {
             ImageUrlInputView(imageUrlString: $viewModel.imageUrlString, onImageUrlSubmit: viewModel.getImageFromUrl)
-            CameraMainView()
+            CameraView(onPhotoTaken: viewModel.handleImageSelection)
             ImageLibraryView(albumImages: viewModel.albumImages, showImagePicker: $viewModel.showImagePicker, onImageSelected: viewModel.handleImagesSelection)
         }
         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
@@ -28,6 +28,83 @@ struct ImageUrlInputView: View {
             
             Button("Load Image", action: onImageUrlSubmit)
                 .padding()
+        }
+    }
+}
+
+struct CameraView: View {
+    @State private var isCameraPresented = false
+    @State private var image: UIImage?
+    var onPhotoTaken: (UIImage) -> ()
+    
+    var body: some View {
+        
+        NavigationView {
+            ZStack {
+                VStack {
+                    Text("Right Swipe to Open Camera")
+                }
+                
+                if isCameraPresented {
+                    Camera(isPresented: $isCameraPresented, image: $image, onPhotoTaken: onPhotoTaken)
+                        .transition(.move(edge: .trailing))
+                        .zIndex(1)
+                }
+            }
+        }
+        .gesture(DragGesture(minimumDistance: 50)
+            .onEnded { value in
+                if value.translation.width < 0 {
+                    withAnimation {
+                        self.isCameraPresented = true
+                    }
+                }
+            })
+    }
+}
+
+struct Camera: UIViewControllerRepresentable {
+    @Binding var isPresented: Bool
+    @Binding var image: UIImage?
+    var onPhotoTaken: (UIImage) -> ()
+    
+    
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.delegate = context.coordinator
+        picker.sourceType = .camera
+        return picker
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
+    }
+    
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+        var parent: Camera
+        
+        init(_ parent: Camera) {
+            self.parent = parent
+        }
+        
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+                print("新しい画像が選択されました: \(String(describing: uiImage))")
+                parent.image = uiImage
+                parent.onPhotoTaken(uiImage)
+            }
+            parent.isPresented = false
+        }
+        
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            DispatchQueue.main.async {
+                withAnimation {
+                    self.parent.isPresented = false
+                }
+            }
         }
     }
 }
