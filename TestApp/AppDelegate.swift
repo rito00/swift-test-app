@@ -18,11 +18,26 @@ class AppDelegate:NSObject, UIApplicationDelegate, UNUserNotificationCenterDeleg
         UNUserNotificationCenter.current().delegate = notificationDelegate
         
         let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if granted {
-                print("許可されました！")
-            }else{
-                print("拒否されました...")
+        
+        // 通知処理部
+        center.getNotificationSettings { settings in
+            switch settings.authorizationStatus {
+            case .notDetermined:
+                // まだユーザーに許可を求めていない場合
+                center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+                    if granted {
+                        print("通知の許可が得られました。")
+                    } else if let error = error {
+                        print("通知の許可が得られませんでした: \(error)")
+                    }
+                }
+            case .denied:
+                DispatchQueue.main.async {
+                    openAppSettings()
+                }
+            default:
+                print("通知の許可が存在するようです。")
+                break
             }
         }
         return true
@@ -35,5 +50,15 @@ class NotificationDelegate: NSObject, UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         // フォアグラウンドでの通知表示オプション
         completionHandler([.banner, .sound])
+    }
+}
+
+func openAppSettings() {
+    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+        return
+    }
+    
+    if UIApplication.shared.canOpenURL(settingsUrl) {
+        UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
     }
 }

@@ -12,11 +12,7 @@ import Combine
 @main
 struct Main: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
-    init() {
-//        requestNotificationPermission()
-    }
-    
+
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -24,6 +20,7 @@ struct Main: App {
                 .environmentObject(GetImageViewModel())
         }
     }
+    
 }
 
 class AppState: ObservableObject {
@@ -67,15 +64,7 @@ struct ContentView: View {
     
 }
 
-func openAppSettings() {
-    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
-        return
-    }
-    
-    if UIApplication.shared.canOpenURL(settingsUrl) {
-        UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
-    }
-}
+
 
 
 #Preview {
