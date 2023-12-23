@@ -38,7 +38,7 @@ struct ContentView: View {
                     Text("Counter")
                         .padding()
                 }
-                NavigationLink(destination: GetImageView()) {
+                NavigationLink(destination: ImagesView()) {
                     Text("Images")
                         .padding()
                 }
@@ -70,4 +70,5 @@ struct ContentView: View {
 #Preview {
     ContentView()
         .environmentObject(AppState())
+        .environmentObject(GetImageViewModel())
 }

@@ -57,7 +57,7 @@ struct ImageUrlInputView: View {
         VStack {
             TextField("Enter Image URL", text: $imageUrlString)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding(.top)
+                .padding()
             
             Button("Load Image", action: onImageUrlSubmit)
                 .padding()
