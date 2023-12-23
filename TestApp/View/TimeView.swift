@@ -14,23 +14,38 @@ struct TimeView: View {
     @State private var hours = 0
     @State private var minutes = 0
     @State private var seconds = 0
+    @State private var remainingTimeInSeconds = 0
     @State private var timer: Timer?
-    
     @State private var showingAlert: Bool = false
+    
+    private var totalTimeSeconds: Int {
+        return hours * 3600 + minutes * 60 + seconds
+    }
+    
+    private var remainingTimeFormatted: String {
+        let hours = remainingTimeInSeconds / 3600
+        let minutes = (remainingTimeInSeconds % 3600) / 60
+        let seconds = remainingTimeInSeconds % 60
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+    }
     
     var body: some View {
         Text(viewModel.currentTime)
             .font(.largeTitle)
+            .bold()
             .padding()
+        
         Section("通知"){
-            Text("Select Time")
-                .font(.headline)
+            // カウントダウン表示
+            Text("\(remainingTimeFormatted)")
+                .font(.largeTitle)
             
             HStack {
                 timePickerView(title: "時間", range: 0..<24, selection: $hours)
                 timePickerView(title: "分", range: 0..<60, selection: $minutes)
                 timePickerView(title: "秒", range: 0..<60, selection: $seconds)
             }
+            .frame(width: .infinity, height: 150)
             
             HStack {
                 Button(action: {
@@ -39,22 +54,24 @@ struct TimeView: View {
                     Text("キャンセル")
                         .frame(width: 80, height: 80)
                         .foregroundColor(.white)
-                        .background(Color.red)
+                        .background(totalTimeSeconds == 0 ? Color.gray : Color.red)
                         .clipShape(Circle())
                 }
                 
                 Spacer()
                 
                 Button(action: {
-                    print("\(selectedTime)")
                     startTimer(hours: hours, minutes: minutes, seconds: seconds)
                 }) {
                     Text("開始")
                         .frame(width: 80, height: 80)
-                        .foregroundColor(.white)
-                        .background(Color.green)
+                        .foregroundColor(.green)
+                        .brightness(0.7)
+                        .background(totalTimeSeconds == 0 ? .green : .green)
+                        .brightness(totalTimeSeconds == 0 ? -0.6 : 0)
                         .clipShape(Circle())
                 }
+                .disabled(totalTimeSeconds == 0)
             }
             .padding(.leading, 45)
             .padding(.trailing, 45)
@@ -86,6 +103,19 @@ struct TimeView: View {
     }
     
     private func startTimer(hours: Int, minutes: Int, seconds: Int) {
+        // 既存タイマー無効
+        timer?.invalidate()
+        self.remainingTimeInSeconds = self.totalTimeSeconds
+        // カウントダウンタイマーセット
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            if self.remainingTimeInSeconds > 0 {
+                self.remainingTimeInSeconds -= 1
+            } else {
+                self.timer?.invalidate()
+            }
+        }
+        
+        // 通知処理部
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             switch settings.authorizationStatus {
             case .notDetermined:
@@ -109,12 +139,8 @@ struct TimeView: View {
             content.body = "Your timer is up!"
             content.sound = UNNotificationSound.default
             
-            // 総秒数を計算
-            let totalSeconds = hours * 3600 + minutes * 60 + seconds
-            print("total seconds \(totalSeconds)")
-            
             // トリガーの設定
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(totalSeconds), repeats: false)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(totalTimeSeconds), repeats: false)
             
             // 通知リクエストの作成
             let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
