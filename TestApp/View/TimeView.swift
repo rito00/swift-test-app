@@ -11,10 +11,7 @@ struct TimeView: View {
     @StateObject var viewModel = TimeViewModel()
     
     var body: some View {
-        Text(viewModel.currentTime)
-            .font(.largeTitle)
-            .bold()
-            .padding()
+        currentTimeView()
         
         Section("タイマー"){
             // カウントダウン表示
@@ -55,6 +52,22 @@ struct TimeView: View {
             }
             .padding(.leading, 45)
             .padding(.trailing, 45)
+        }
+    }
+    
+    private func currentTimeView() -> some View {
+        withAnimation(.easeInOut(duration: 10.0)) {
+            Text(viewModel.currentTime)
+                .font(.largeTitle)
+                .bold()
+                .shadow(color: .gray, radius: 2, x: 0, y: 2)
+                .background(Color.white)
+                .cornerRadius(10)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(Color.blue, lineWidth: 3)
+                )
+                .padding()
         }
     }
     

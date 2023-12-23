@@ -20,6 +20,8 @@ class TimeViewModel: ObservableObject {
     }
     
     init() {
+        updateTime()
+        
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.updateTime()
         }
@@ -44,8 +46,6 @@ class TimeViewModel: ObservableObject {
         // カウントダウンタイマーセット
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             if self.remainingTimeInSeconds > 0 {
-                print("minus!!")
-                print("remaining \(self.remainingTimeInSeconds)")
                 self.remainingTimeInSeconds -= 1
             } else {
                 self.timer?.invalidate()
