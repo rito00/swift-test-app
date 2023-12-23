@@ -5,11 +5,15 @@
 //  Created by 伊藤陸斗 on 2023/12/12.
 //
 
+import UIKit
 import SwiftUI
 import Combine
 
 @main
 struct Main: App {
+    init() {
+//        requestNotificationPermission()
+    }
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -46,10 +50,10 @@ struct ContentView: View {
                     Text("Custom Scroll")
                         .padding()
                 }
-//                NavigationLink(destination: CameraView()){
-//                    Text("Camera")
-//                        .padding()
-//                }
+                NavigationLink(destination: TimeView()){
+                    Text("Time")
+                        .padding()
+                }
             }
             Text("count \(appState.count)")
                 .padding()

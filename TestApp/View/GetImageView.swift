@@ -33,10 +33,6 @@ struct GetImageView: View {
                             .padding()
                         
                         Button(action: {
-                            // ここで削除の処理を行う
-//                            if let index = viewModel.albumImages.firstIndex(of: selectedImage!) {
-//                                viewModel.albumImages.remove(at: index)
-//                            }
                             viewModel.removeImage(imageData: selectedImageData!)
                             selectedImageData = nil
                         }) {
@@ -146,6 +142,7 @@ struct ImageLibraryView: View {
                                 .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
                                 .clipped()
                                 .border(Color.black, width: 0.5)
+                                .contentShape(Rectangle())
                                 .onTapGesture {
                                     selectedImageData = data
                                 }
