@@ -11,9 +11,12 @@ import Combine
 
 @main
 struct Main: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+    
     init() {
 //        requestNotificationPermission()
     }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -62,6 +65,16 @@ struct ContentView: View {
         .navigationBarTitle("メイン")
     }
     
+}
+
+func openAppSettings() {
+    guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
+        return
+    }
+    
+    if UIApplication.shared.canOpenURL(settingsUrl) {
+        UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
+    }
 }
 
 

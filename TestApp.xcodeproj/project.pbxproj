@@ -18,6 +18,7 @@
 		52A8DD4C2B365E87005EEB86 /* PushNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A8DD4B2B365E87005EEB86 /* PushNotificationView.swift */; };
 		52A8DD4E2B3663CB005EEB86 /* TimeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A8DD4D2B3663CB005EEB86 /* TimeViewModel.swift */; };
 		52A8DD502B3668A5005EEB86 /* TimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A8DD4F2B3668A5005EEB86 /* TimeView.swift */; };
+		52AABD832B36AC8E001F6D76 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52AABD822B36AC8E001F6D76 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		52A8DD4B2B365E87005EEB86 /* PushNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationView.swift; sourceTree = "<group>"; };
 		52A8DD4D2B3663CB005EEB86 /* TimeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeViewModel.swift; sourceTree = "<group>"; };
 		52A8DD4F2B3668A5005EEB86 /* TimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeView.swift; sourceTree = "<group>"; };
+		52AABD822B36AC8E001F6D76 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 				52C2F69F2B2D2D7D004FDE48 /* ViewModel */,
 				527E94272B28608D00CC951A /* Assets.xcassets */,
 				527E94292B28608D00CC951A /* Preview Content */,
+				52AABD822B36AC8E001F6D76 /* AppDelegate.swift */,
 			);
 			path = TestApp;
 			sourceTree = "<group>";
@@ -182,6 +185,7 @@
 				52A8DD502B3668A5005EEB86 /* TimeView.swift in Sources */,
 				527E94422B28689C00CC951A /* GetImageViewModel.swift in Sources */,
 				527E94402B28682700CC951A /* Options.swift in Sources */,
+				52AABD832B36AC8E001F6D76 /* AppDelegate.swift in Sources */,
 				527E943E2B28680400CC951A /* CounterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

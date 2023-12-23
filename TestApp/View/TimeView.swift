@@ -45,11 +45,12 @@ struct TimeView: View {
                 timePickerView(title: "分", range: 0..<60, selection: $minutes)
                 timePickerView(title: "秒", range: 0..<60, selection: $seconds)
             }
-            .frame(width: .infinity, height: 150)
+            .frame(height: 150)
+        
             
             HStack {
                 Button(action: {
-                    
+                    self.clearTimer()
                 }) {
                     Text("キャンセル")
                         .frame(width: 80, height: 80)
@@ -104,7 +105,7 @@ struct TimeView: View {
     
     private func startTimer(hours: Int, minutes: Int, seconds: Int) {
         // 既存タイマー無効
-        timer?.invalidate()
+        self.timer?.invalidate()
         self.remainingTimeInSeconds = self.totalTimeSeconds
         // カウントダウンタイマーセット
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
@@ -131,31 +132,17 @@ struct TimeView: View {
                 break
             }
         }
-        
-        func scheduleNotification(hours: Int, minutes: Int, seconds: Int) {
-            requestNotificationPermission()
-            let content = UNMutableNotificationContent()
-            content.title = "Scheduled Alert"
-            content.body = "Your timer is up!"
-            content.sound = UNNotificationSound.default
-            
-            // トリガーの設定
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(totalTimeSeconds), repeats: false)
-            
-            // 通知リクエストの作成
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-            
-            // 通知センターにリクエストを追加
-            UNUserNotificationCenter.current().add(request) { error in
-                if let error = error {
-                    print("通知のスケジュールに失敗しました: \(error)")
-                }
-            }
-        }
     }
     
-    // アプリ起動時に呼び出す
-    private func requestNotificationPermission() {
+    private func clearTimer() {
+        self.timer?.invalidate()
+        self.hours = 0
+        self.minutes = 0
+        self.seconds = 0
+        self.remainingTimeInSeconds = 0
+    }
+    
+    func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if granted {
                 print("通知の許可が得られました。")
@@ -167,13 +154,23 @@ struct TimeView: View {
         }
     }
     
-    private func openAppSettings() {
-        guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
-            return
-        }
+    func scheduleNotification(hours: Int, minutes: Int, seconds: Int) {
+        let content = UNMutableNotificationContent()
+        content.title = "Scheduled Alert"
+        content.body = "Your timer is up!"
+        content.sound = UNNotificationSound.default
         
-        if UIApplication.shared.canOpenURL(settingsUrl) {
-            UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)
+        // トリガーの設定
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(totalTimeSeconds), repeats: false)
+        
+        // 通知リクエストの作成
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        
+        // 通知センターにリクエストを追加
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("通知のスケジュールに失敗しました: \(error)")
+            }
         }
     }
 }
