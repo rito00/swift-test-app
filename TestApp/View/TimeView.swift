@@ -11,8 +11,26 @@ struct TimeView: View {
     @StateObject var viewModel = TimeViewModel()
     
     var body: some View {
-        currentTimeView()
         
+        currentTimeView()
+            .frame(height:200, alignment: .top)
+        
+        timerView()
+    }
+    
+    private func currentTimeView() -> some View {
+        VStack() {
+            Text(viewModel.currentTime)
+                .font(.largeTitle)
+                .bold()
+                .shadow(color: .gray, radius: 2, x: 0, y: 2)
+                .background()
+                .padding()
+        }
+
+    }
+    
+    private func timerView() -> some View {
         Section("タイマー"){
             // カウントダウン表示
             Text("\(viewModel.remainingTimeFormatted)")
@@ -21,8 +39,6 @@ struct TimeView: View {
             HStack {
                 timePickerView(selection: $viewModel.timeSelection)
             }
-            .frame(height: 150)
-        
             
             HStack {
                 Button(action: {
@@ -53,22 +69,7 @@ struct TimeView: View {
             .padding(.leading, 45)
             .padding(.trailing, 45)
         }
-    }
-    
-    private func currentTimeView() -> some View {
-        withAnimation(.easeInOut(duration: 10.0)) {
-            Text(viewModel.currentTime)
-                .font(.largeTitle)
-                .bold()
-                .shadow(color: .gray, radius: 2, x: 0, y: 2)
-                .background(Color.white)
-                .cornerRadius(10)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 10)
-                        .stroke(Color.blue, lineWidth: 3)
-                )
-                .padding()
-        }
+        
     }
     
     private func timePickerView(selection: Binding<(hours: Int, minutes: Int, seconds: Int)>) -> some View {

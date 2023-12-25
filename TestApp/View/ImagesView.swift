@@ -21,6 +21,7 @@ struct ImagesView: View {
                     Text("Details")
                 }
         }
+        .tabViewStyle(PageTabViewStyle())
     }
 }
 

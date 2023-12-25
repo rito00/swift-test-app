@@ -15,7 +15,7 @@ class GetImageViewModel: ObservableObject {
     func handleImagesSelection(images: [UIImage]) {
         for image in images {
             if let fileName = saveImageLocally(image: image) {
-                let imageData = ImageData(image: image, fileName: fileName)
+                let imageData = ImageData(image: image, fileName: fileName, caption: "")
                 imagesData.append(imageData)
             }
         }
@@ -85,4 +85,5 @@ struct ImageData: Identifiable {
     let id = UUID()
     var image : UIImage
     var fileName : String
+    var caption : String
 }
