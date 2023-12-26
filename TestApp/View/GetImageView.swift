@@ -5,6 +5,8 @@ struct GetImageView: View {
     //    @StateObject private var viewModel = GetImageViewModel()
     @EnvironmentObject var viewModel: GetImageViewModel
     @State var selectedImageData: ImageData?
+    @State private var overlayOpacity = 0.0 // オーバーレイの透明度の状態
+    @State private var imageScale = 0.0 // 画像のスケールの状態
     
     var body: some View {
         
@@ -20,17 +22,41 @@ struct GetImageView: View {
         .border(/*@START_MENU_TOKEN@*/Color.black/*@END_MENU_TOKEN@*/)
         .overlay(
             selectedImageData != nil ?
-            Color.black.opacity(0.5)
+            Color.black.opacity(overlayOpacity)
                 .ignoresSafeArea()
                 .onTapGesture {
-                    selectedImageData = nil
+                    //                    selectedImageData = nil
+                    withAnimation {
+                        overlayOpacity = 0
+                        imageScale = 0
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        selectedImageData = nil
+                    }
                 }
                 .overlay(
                     VStack {
+                        Text(selectedImageData!.fileName)
+                            .foregroundColor(.primary)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(10)
+                        
                         Image(uiImage: selectedImageData!.image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .padding()
+                            .scaleEffect(imageScale)
+                            .onAppear {
+                                // 画像を全面表示するときのアニメーション
+                                withAnimation(
+//                                    .easeInOut(duration: 0.2)
+                                    .spring(response: 0.2, dampingFraction: 1)
+//                                    .linear(duration: 0.2)
+                                ) {
+                                    imageScale = 1
+                                }
+                            }
                         
                         Button(action: {
                             viewModel.removeImage(imageData: selectedImageData!)
@@ -44,6 +70,12 @@ struct GetImageView: View {
                         }
                     }
                 )
+                .onAppear {
+                    withAnimation {
+                        overlayOpacity = 0.5
+                    }
+                }
+            
             : nil
         )
     }

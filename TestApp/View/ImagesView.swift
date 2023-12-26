@@ -8,20 +8,45 @@
 import SwiftUI
 
 struct ImagesView: View {
+    @State var isP = false
     var body: some View {
-        TabView {
-            GetImageView()
-                .tabItem {
-                    Image(systemName: "1.circle")
-                    Text("Get Image")
-                }
-            ImageDetailsView()
-                .tabItem {
-                    Image(systemName: "2.circle")
-                    Text("Details")
-                }
+        NavigationView {
+            TabView {
+                GetImageView()
+                    .tabItem {
+                        Image(systemName: "1.circle")
+                        Text("Get Image")
+                    }
+                ImageDetailsView()
+                    .tabItem {
+                        Image(systemName: "2.circle")
+                        Text("Details")
+                    }
+            }
+            .tabViewStyle(PageTabViewStyle())
         }
-        .tabViewStyle(PageTabViewStyle())
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing, content: {
+                HStack(alignment: .center){
+                    Image("dotty")
+                        .resizable()
+                        .frame(width: 20, height: 20)
+                        .aspectRatio(contentMode: .fit)
+                    Text("Image Library")
+                }
+                .onTapGesture(perform: {
+                    isP = true
+                })
+            }
+            )
+        }
+        .navigationTitle("タイトル")
+        .toolbarTitleDisplayMode(.automatic)
+        .sheet(isPresented: $isP) {
+            ImageDetailsView()
+        }
+        
+        
     }
 }
 

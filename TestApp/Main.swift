@@ -12,7 +12,7 @@ import Combine
 @main
 struct Main: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
@@ -38,6 +38,7 @@ struct ContentView: View {
                     Text("Counter")
                         .padding()
                 }
+   
                 NavigationLink(destination: ImagesView()) {
                     Text("Images")
                         .padding()
@@ -54,12 +55,19 @@ struct ContentView: View {
                     Text("Time")
                         .padding()
                 }
+                
+                ForEach(0..<20){ _ in
+                    NavigationLink(destination: TimeView()){
+                        Text("Time")
+                            .padding()
+                    }
+                }
             }
-            Text("count \(appState.count)")
-                .padding()
+            .navigationBarTitle("メイン")
+            .navigationBarTitleDisplayMode(.automatic)
             
         }
-        .navigationBarTitle("メイン")
+
     }
     
 }
