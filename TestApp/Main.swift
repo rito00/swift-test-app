@@ -54,8 +54,8 @@ struct ContentView: View {
                     Text("Time")
                         .padding()
                 }
-                NavigationLink(destination: AudioPlayerView()){
-                    Text("Map")
+                NavigationLink(destination: MenuMainView()){
+                    Text("Swipe Menu")
                         .padding()
                 }
             }
