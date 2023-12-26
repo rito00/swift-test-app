@@ -38,7 +38,6 @@ struct ContentView: View {
                     Text("Counter")
                         .padding()
                 }
-   
                 NavigationLink(destination: ImagesView()) {
                     Text("Images")
                         .padding()
@@ -55,24 +54,16 @@ struct ContentView: View {
                     Text("Time")
                         .padding()
                 }
-                
-                ForEach(0..<20){ _ in
-                    NavigationLink(destination: TimeView()){
-                        Text("Time")
-                            .padding()
-                    }
+                NavigationLink(destination: AudioPlayerView()){
+                    Text("Map")
+                        .padding()
                 }
             }
             .navigationBarTitle("メイン")
             .navigationBarTitleDisplayMode(.automatic)
-            
         }
-
     }
-    
 }
-
-
 
 
 #Preview {

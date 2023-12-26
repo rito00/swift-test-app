@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5277EB7C2B3A8D0000956878 /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5277EB7B2B3A8D0000956878 /* MapView.swift */; };
+		5277EB812B3AA84200956878 /* AudioPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5277EB802B3AA84200956878 /* AudioPlayerView.swift */; };
 		527E94242B28608C00CC951A /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527E94232B28608C00CC951A /* Main.swift */; };
 		527E94282B28608D00CC951A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 527E94272B28608D00CC951A /* Assets.xcassets */; };
 		527E942B2B28608D00CC951A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 527E942A2B28608D00CC951A /* Preview Assets.xcassets */; };
@@ -24,6 +26,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5277EB7B2B3A8D0000956878 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		5277EB7D2B3A917F00956878 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		5277EB802B3AA84200956878 /* AudioPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerView.swift; sourceTree = "<group>"; };
 		527E94202B28608C00CC951A /* TestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		527E94232B28608C00CC951A /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
 		527E94272B28608D00CC951A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -71,6 +76,7 @@
 		527E94222B28608C00CC951A /* TestApp */ = {
 			isa = PBXGroup;
 			children = (
+				5277EB7D2B3A917F00956878 /* Info.plist */,
 				527E94232B28608C00CC951A /* Main.swift */,
 				52C2F69E2B2D2D64004FDE48 /* View */,
 				52C2F69F2B2D2D7D004FDE48 /* ViewModel */,
@@ -100,6 +106,8 @@
 				52A8DD4F2B3668A5005EEB86 /* TimeView.swift */,
 				52AABD842B36D362001F6D76 /* ImagesView.swift */,
 				52AABD862B36D425001F6D76 /* ImageDetailsView.swift */,
+				5277EB7B2B3A8D0000956878 /* MapView.swift */,
+				5277EB802B3AA84200956878 /* AudioPlayerView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -187,6 +195,7 @@
 				52AABD872B36D425001F6D76 /* ImageDetailsView.swift in Sources */,
 				52A8DD4E2B3663CB005EEB86 /* TimeViewModel.swift in Sources */,
 				52AABD852B36D362001F6D76 /* ImagesView.swift in Sources */,
+				5277EB7C2B3A8D0000956878 /* MapView.swift in Sources */,
 				527E94242B28608C00CC951A /* Main.swift in Sources */,
 				527E94362B28611B00CC951A /* LoadImageFromUrlView.swift in Sources */,
 				52A8DD4C2B365E87005EEB86 /* PushNotificationView.swift in Sources */,
@@ -195,6 +204,7 @@
 				527E94402B28682700CC951A /* Options.swift in Sources */,
 				52AABD832B36AC8E001F6D76 /* AppDelegate.swift in Sources */,
 				527E943E2B28680400CC951A /* CounterView.swift in Sources */,
+				5277EB812B3AA84200956878 /* AudioPlayerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,7 +341,9 @@
 				DEVELOPMENT_TEAM = 4P729VNXL4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TestApp/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Use Location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -361,7 +373,9 @@
 				DEVELOPMENT_TEAM = 4P729VNXL4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TestApp/Info.plist;
 				INFOPLIST_KEY_NSCameraUsageDescription = "";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "Use Location";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
