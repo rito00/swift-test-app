@@ -1,7 +1,7 @@
 import SwiftUI
 import PhotosUI
 
-struct GetImageView: View {
+struct LoadImageFromUrlView: View {
     //    @StateObject private var viewModel = GetImageViewModel()
     @EnvironmentObject var viewModel: GetImageViewModel
     @State var selectedImageData: ImageData?
@@ -37,7 +37,7 @@ struct GetImageView: View {
                 .overlay(
                     VStack {
                         Text(selectedImageData!.fileName)
-                            .foregroundColor(.primary)
+                            .foregroundColor(.secondary)
                             .padding()
                             .background(Color.white)
                             .cornerRadius(10)
@@ -252,6 +252,6 @@ struct CustomImagePicker: UIViewControllerRepresentable {
     }
 }
 #Preview {
-    GetImageView()
+    LoadImageFromUrlView()
         .environmentObject(GetImageViewModel())
 }
