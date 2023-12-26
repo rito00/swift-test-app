@@ -14,7 +14,7 @@ struct ImagesView: View {
     var body: some View {
         NavigationView {
             TabView(selection: $selectedTab) {
-                LoadImageFromUrlView()
+                SelectImageView()
                     .tabItem {
                         Image(systemName: "1.circle")
                         Text("Get Image")

@@ -1,7 +1,7 @@
 import SwiftUI
 import PhotosUI
 
-struct LoadImageFromUrlView: View {
+struct SelectImageView: View {
     //    @StateObject private var viewModel = GetImageViewModel()
     @EnvironmentObject var viewModel: GetImageViewModel
     @State var selectedImageData: ImageData?
@@ -50,9 +50,9 @@ struct LoadImageFromUrlView: View {
                             .onAppear {
                                 // 画像を全面表示するときのアニメーション
                                 withAnimation(
-//                                    .easeInOut(duration: 0.2)
+                                    //                                    .easeInOut(duration: 0.2)
                                     .spring(response: 0.2, dampingFraction: 1)
-//                                    .linear(duration: 0.2)
+                                    //                                    .linear(duration: 0.2)
                                 ) {
                                     imageScale = 1
                                 }
@@ -164,24 +164,41 @@ struct ImageLibraryView: View {
             }
             GeometryReader { geometry in
                 let columns: [GridItem] = Array(repeating: GridItem(spacing: 0), count: 3) // 3列のグリッド
-                
-                ScrollView{
-                    LazyVGrid(columns: columns, spacing: 0) {
-                        ForEach(imagesData) { data in
-                            Image(uiImage: data.image)
-                                .resizable()
-                                .aspectRatio(contentMode: isImageLandscape(image: data.image) ? .fit : .fill)
-                                .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
-                                .clipped()
-                                .border(Color.black, width: 0.5)
-                                .contentShape(Rectangle())
-                                .onTapGesture {
-                                    selectedImageData = data
-                                }
+                ScrollViewReader{ scrollProxy in
+                    ZStack(alignment: .topTrailing){
+                        Button(action: {
+                            withAnimation {
+                                scrollProxy.scrollTo("scrollViewTop", anchor: .top) // ScrollViewの最上部へスクロール
+                            }
+                        }) {
+                            Text("↑")
+                                .padding()
+                                .background(Color.blue.opacity(1))
+                                .foregroundColor(Color.white)
+                                .cornerRadius(10)
                         }
+                        .zIndex(1)
+                        .padding()
+                        
+                        ScrollView{
+                            LazyVGrid(columns: columns, spacing: 0) {
+                                ForEach(imagesData) { data in
+                                    Image(uiImage: data.image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: isImageLandscape(image: data.image) ? .fit : .fill)
+                                        .frame(width: geometry.size.width / 3, height: geometry.size.width / 3)
+                                        .clipped()
+                                        .border(Color.black, width: 0.5)
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            selectedImageData = data
+                                        }
+                                }
+                            }.id("scrollViewTop")
+                        }
+                        .border(Color.orange)
                     }
                 }
-                .border(Color.orange)
             }
         }
         .padding()
@@ -252,6 +269,6 @@ struct CustomImagePicker: UIViewControllerRepresentable {
     }
 }
 #Preview {
-    LoadImageFromUrlView()
+    SelectImageView()
         .environmentObject(GetImageViewModel())
 }

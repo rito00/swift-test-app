@@ -69,9 +69,9 @@ struct MenuMainView: View {
                         Circle().stroke(Color.gray, lineWidth: 1))
                     .frame(width: 60, height: 60)
                     .clipShape(Circle())
-                Text("SwiftUIへの道")
+                Text("SwiftUI")
                     .font(.largeTitle)
-                Text("@road2swiftui")
+                Text("@swiftui")
                     .font(.caption)
                 Divider()
                 ScrollView (.vertical, showsIndicators: true) {
