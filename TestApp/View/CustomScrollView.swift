@@ -11,7 +11,6 @@ import SwiftUI
 
 
 struct CustomScrollView: View {
-    
     /// 表示データ
     @State var dataList: [Int] = [Int](1...20)
 

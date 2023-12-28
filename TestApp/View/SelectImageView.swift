@@ -9,7 +9,6 @@ struct SelectImageView: View {
     @State private var imageScale = 0.0 // 画像のスケールの状態
     
     var body: some View {
-        
         VStack {
             // Load Image from URL
             ImageUrlInputView(imageUrlString: $viewModel.imageUrlString, onImageUrlSubmit: viewModel.getImageFromUrl)

@@ -12,7 +12,6 @@ struct ImagesView: View {
     @State var selectedTab = 0
     
     var body: some View {
-        NavigationView {
             TabView(selection: $selectedTab) {
                 SelectImageView()
                     .tabItem {
@@ -40,7 +39,6 @@ struct ImagesView: View {
                     }
                 }
             )
-        }
         // Navigation Bar
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing, content: {
